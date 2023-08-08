@@ -21,6 +21,9 @@ export const createCanvas = (container: HTMLCanvasElement | null) => {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf0f0f0);
 
+  const textureLoader = new THREE.TextureLoader();
+  const houseTexture = textureLoader.load("/house.jpg");
+  //light
   {
     const color = 0xffffff;
     const intensity = 500;
@@ -35,7 +38,8 @@ export const createCanvas = (container: HTMLCanvasElement | null) => {
   {
     const groundGeometry = new THREE.PlaneGeometry(100, 100);
 
-    const groundMaterial = new THREE.MeshPhongMaterial({ color: 0xcc4866 });
+    const groundMaterial = new THREE.MeshBasicMaterial({ map: houseTexture });
+
     const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
 
     groundMesh.position.set(0, 0, 0);
@@ -71,8 +75,13 @@ export const createCanvas = (container: HTMLCanvasElement | null) => {
     shape.holes.push(path);
 
     const geometry = new THREE.ShapeGeometry(shape);
-    const holeSquareMaterial = new THREE.MeshPhongMaterial({ color: 0xcc8866 });
+    const holeSquareMaterial = new THREE.MeshBasicMaterial({
+      map: houseTexture,
+    });
     const mesh = new THREE.Mesh(geometry, holeSquareMaterial);
+
+    console.log(Object.keys(geometry));
+    console.log(geometry.attributes);
 
     mesh.position.set(0, 0, 10);
     mesh.scale.set(1, 1, 1);
